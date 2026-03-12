@@ -1,14 +1,5 @@
 import { useState, useEffect, useRef } from "react";
 
-const SPEECH_LANGS = [
-  { text: "Happy Birthday Su!", lang: "en-US" },
-  { text: "Chúc mừng sinh nhật Su!", lang: "vi-VN" },
-  { text: "생일 축하해 Su!", lang: "ko-KR" },
-  { text: "お誕生日おめでとう Su!", lang: "ja-JP" },
-  { text: "生日快乐 Su!", lang: "zh-CN" },
-  { text: "Feliz Cumpleaños Su!", lang: "es-ES" },
-];
-
 const WISHES = [
   {
     title: "#1 The Glow Up",
@@ -87,7 +78,7 @@ function Face({ id, emoji, onClick }) {
   const [wobble, setWobble] = useState(0);
   const [clicked, setClicked] = useState(false);
   const posRef = useRef({ x: pos.x, y: pos.y });
-  const velRef = useRef({ vx: vel.vx, vy: vel.vy });
+  const velRef = useState({ vx: vel.vx, vy: vel.vy });
   const frameRef = useRef();
 
   useEffect(() => {
@@ -205,9 +196,7 @@ function WishModal({ wish, onClose }) {
       <div
         onClick={(e) => e.stopPropagation()}
         style={{
-          background: "#fff9f0",
           borderRadius: "28px",
-          padding: "48px 40px 40px",
           maxWidth: "420px",
           width: "90%",
           textAlign: "center",
@@ -215,7 +204,7 @@ function WishModal({ wish, onClose }) {
           transform: visible ? "scale(1) translateY(0)" : "scale(0.7) translateY(40px)",
           transition: "transform 0.35s cubic-bezier(.36,2,.5,1)",
           background: "linear-gradient(135deg, #ff69b4, #ffcc00, #4d96ff)",
-          padding: "3px",          
+          padding: "3px",
           position: "relative",
         }}
       >
