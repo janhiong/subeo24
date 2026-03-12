@@ -1,5 +1,14 @@
 import { useState, useEffect, useRef } from "react";
 
+const SPEECH_LANGS = [
+  { text: "Happy Birthday Su!", lang: "en-US" },
+  { text: "Chúc mừng sinh nhật Su!", lang: "vi-VN" },
+  { text: "생일 축하해 Su!", lang: "ko-KR" },
+  { text: "お誕生日おめでとう Su!", lang: "ja-JP" },
+  { text: "生日快乐 Su!", lang: "zh-CN" },
+  { text: "Feliz Cumpleaños Su!", lang: "es-ES" },
+];
+
 const WISHES = [
   {
     title: "#1 The Glow Up",
@@ -18,14 +27,11 @@ const WISHES = [
     message: "Wish you make SO much money. Not for you though : ) specifically so you can buy me good food. Think of yourself as my personal meal fund. Invest wisely."
   },
   {
-    title: "#5nal The Real One",
+    title: "#5 The Real One",
     message: "Okay but forreal... I wish you everything. Health, happiness, success, good hair days, fast WiFi, and me. Always me. Happy birthday Subeo!!"
   }
 ];
 
-// Put your images in the /public/Assets/ folder of your React project
-// Then reference them starting with /Assets/filename.jpg
-// ⚠️ HEIC files won't work in browsers — convert IMG_0845 and IMG_0864 to JPG first!
 const FACES = [
   "/Assets/att.8gysL4k_mNTgGXF8SCRjtD371O-kMkebz3G43pGb8_A.JPG",
   "/Assets/att.APXwGgyuBIrxYGOsdprPEaYLIjFS40cHZK1fuf1g7aI 2.jpg",
@@ -71,16 +77,16 @@ function Face({ id, emoji, onClick }) {
     x: randomBetween(5, 75),
     y: randomBetween(10, 75),
   });
-  const [vel, setVel] = useState({
-    vx: randomBetween(-0.03, 0.03) || 0.02,
-    vy: randomBetween(-0.03, 0.03) || 0.02,
-  });
   const [wobble, setWobble] = useState(0);
   const [clicked, setClicked] = useState(false);
   const posRef = useRef({ x: pos.x, y: pos.y });
-  const velRef = useState({ vx: vel.vx, vy: vel.vy });
+  const velRef = useRef({
+    vx: randomBetween(-0.03, 0.03) || 0.02,
+    vy: randomBetween(-0.03, 0.03) || 0.02,
+  });
   const frameRef = useRef();
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     let lastTime = performance.now();
     const speed = randomBetween(4, 9);
@@ -114,10 +120,10 @@ function Face({ id, emoji, onClick }) {
     return () => cancelAnimationFrame(frameRef.current);
   }, []);
 
-  const handleClick = () => {
+  const handleClick = (e) => {
     setClicked(true);
     setTimeout(() => setClicked(false), 400);
-    onClick(id);
+    onClick(id, e);
   };
 
   const scale = 1 + Math.sin(wobble) * 0.06;
@@ -125,7 +131,7 @@ function Face({ id, emoji, onClick }) {
 
   return (
     <button
-      onClick={handleClick}
+      onClick={(e) => handleClick(e)}
       style={{
         position: "absolute",
         left: `${pos.x}%`,
@@ -138,7 +144,7 @@ function Face({ id, emoji, onClick }) {
         borderRadius: "50%",
         transform: `scale(${clicked ? 1.5 : scale}) rotate(${rotate}deg)`,
         transition: clicked ? "transform 0.15s cubic-bezier(.36,2,.5,1)" : "none",
-        filter: `drop-shadow(0 4px 20px rgba(0,0,0,0.25))`,
+        filter: "drop-shadow(0 4px 20px rgba(0,0,0,0.25))",
         zIndex: 10,
         willChange: "transform",
         background: "linear-gradient(#ffe4e8, #ffe4e8) padding-box, linear-gradient(135deg, #ff69b4, #ffcc00, #4d96ff) border-box",
@@ -208,54 +214,68 @@ function WishModal({ wish, onClose }) {
           position: "relative",
         }}
       >
-        <div style={{ fontSize: "64px", marginBottom: "12px" }}>{wish.emoji}</div>
-        <h2 style={{
-          fontFamily: "'Lilita One', cursive",
-          fontSize: "26px",
-          color: "#e8334a",
-          margin: "0 0 16px",
-          lineHeight: 1.2,
+        <div style={{
+          background: "#fff9f0",
+          borderRadius: "26px",
+          padding: "48px 40px 40px",
         }}>
-          {wish.title}
-        </h2>
-        <p style={{
-          fontFamily: "'Nunito', sans-serif",
-          fontSize: "17px",
-          color: "#444",
-          lineHeight: 1.7,
-          margin: "0 0 28px",
-        }}>
-          {wish.message}
-        </p>
-        <button
-          onClick={handleClose}
-          style={{
-            background: "#e8334a",
-            color: "#fff",
-            border: "none",
-            borderRadius: "50px",
-            padding: "12px 36px",
+          <h2 style={{
             fontFamily: "'Lilita One', cursive",
-            fontSize: "16px",
-            cursor: "pointer",
-            letterSpacing: "0.5px",
-          }}
-        >
-          Wish Accepted
-        </button>
+            fontSize: "26px",
+            color: "#e8334a",
+            margin: "0 0 16px",
+            lineHeight: 1.2,
+          }}>
+            {wish.title}
+          </h2>
+          <p style={{
+            fontFamily: "'Nunito', sans-serif",
+            fontSize: "17px",
+            color: "#444",
+            lineHeight: 1.7,
+            margin: "0 0 28px",
+          }}>
+            {wish.message}
+          </p>
+          <button
+            onClick={handleClose}
+            style={{
+              background: "#e8334a",
+              color: "#fff",
+              border: "none",
+              borderRadius: "50px",
+              padding: "12px 36px",
+              fontFamily: "'Lilita One', cursive",
+              fontSize: "16px",
+              cursor: "pointer",
+              letterSpacing: "0.5px",
+            }}
+          >
+            Wish Accepted 💕
+          </button>
+        </div>
       </div>
     </div>
   );
 }
 
 const BIRTHDAY_PHRASES = [
-  "Happy Birthday Suu iuuu",       // English
-  "CHUC MUNG SINH NHAT Suu iuuu",  // Vietnamese
-  "생일 축하해 Suu iuuu",            // Korean
-  "お誕生日おめでとう Suu iuuu",     // Japanese
-  "生日快乐 Suu iuuu",               // Chinese
-  "Feliz Cumpleaños Suu iuuu",      // Spanish
+  "Happy Birthday Suu iuuu 🥳",
+  "CHUC MUNG SINH NHAT Suu iuuu 🥳",
+  "생일 축하해 Suu iuuu 🥳",
+  "お誕生日おめでとう Suu iuuu 🥳",
+  "生日快乐 Suu iuuu 🥳",
+  "Feliz Cumpleaños Suu iuuu 🥳",
 ];
+
+function speakPhrase(index) {
+  const { text, lang } = SPEECH_LANGS[index];
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = lang;
+  utterance.rate = 0.9;
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(utterance);
+}
 
 function HappyBirthdayText() {
   const [index, setIndex] = useState(0);
@@ -265,7 +285,11 @@ function HappyBirthdayText() {
     const interval = setInterval(() => {
       setFade(false);
       setTimeout(() => {
-        setIndex((i) => (i + 1) % BIRTHDAY_PHRASES.length);
+        setIndex((i) => {
+          const next = (i + 1) % BIRTHDAY_PHRASES.length;
+          speakPhrase(next);
+          return next;
+        });
         setFade(true);
       }, 400);
     }, 2200);
@@ -294,14 +318,14 @@ function HappyBirthdayText() {
 }
 
 function Confetti() {
-  const animals = ["🐶", "💸", "🎂", "🎓", "🌉", "📱", "🎉"];
-  const pieces = Array.from({ length: 20 }, (_, i) => ({
+  const animals = ["🐶", "💸", "🎂", "🎓", "🌉", "📱", "🎉", "MONEY", "PHD", "H1B", "HEALTH", "WEALTH", "FAMILY"];
+  const pieces = Array.from({ length: 30 }, (_, i) => ({
     id: i,
     left: `${Math.random() * 100}%`,
     emoji: animals[Math.floor(Math.random() * animals.length)],
     delay: `${Math.random() * 3}s`,
     duration: `${3 + Math.random() * 8}s`,
-    size: `${20 + Math.random() * 20}px`,
+    size: `${30 + Math.random() * 30}px`,
   }));
 
   return (
@@ -327,21 +351,69 @@ function Confetti() {
   );
 }
 
+function Firework({ x, y, onDone }) {
+  const particles = Array.from({ length: 12 }, (_, i) => ({
+    angle: (i / 12) * 360,
+    color: ["#ff69b4", "#ffcc00", "#4d96ff", "#ff6b6b", "#6bcb77"][i % 5],
+  }));
+
+  useEffect(() => {
+    const t = setTimeout(onDone, 800);
+    return () => clearTimeout(t);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return (
+    <div style={{ position: "fixed", left: x, top: y, zIndex: 50, pointerEvents: "none" }}>
+      {particles.map((p, i) => (
+        <div key={i} style={{
+          position: "absolute",
+          width: "8px",
+          height: "8px",
+          borderRadius: "50%",
+          background: p.color,
+          animation: `burst-${i} 0.8s ease-out forwards`,
+        }} />
+      ))}
+      <style>{`
+        ${particles.map((p, i) => `
+          @keyframes burst-${i} {
+            0% { transform: translate(0,0) scale(1); opacity: 1; }
+            100% { transform: translate(${Math.cos(p.angle * Math.PI / 180) * 80}px, ${Math.sin(p.angle * Math.PI / 180) * 80}px) scale(0); opacity: 0; }
+          }
+        `).join("")}
+      `}</style>
+    </div>
+  );
+}
+
 export default function App() {
   const [openWish, setOpenWish] = useState(null);
   const [clickedFaces, setClickedFaces] = useState({});
   const [hint, setHint] = useState(true);
+  const [fireworks, setFireworks] = useState([]);
 
   useEffect(() => {
     const t = setTimeout(() => setHint(false), 4000);
     return () => clearTimeout(t);
   }, []);
 
-  const handleFaceClick = (id) => {
+  useEffect(() => {
+    const handleFirstClick = () => {
+      speakPhrase(0);
+      window.removeEventListener("click", handleFirstClick);
+    };
+    window.addEventListener("click", handleFirstClick);
+    return () => window.removeEventListener("click", handleFirstClick);
+  }, []);
+
+  const handleFaceClick = (id, e) => {
     const nextIndex = (clickedFaces[id] ?? -1) + 1;
     const wishIndex = (id + nextIndex) % WISHES.length;
     setClickedFaces((prev) => ({ ...prev, [id]: nextIndex }));
     setOpenWish(WISHES[wishIndex]);
+    const fw = { id: Date.now(), x: e.clientX, y: e.clientY };
+    setFireworks((prev) => [...prev, fw]);
   };
 
   return (
@@ -359,7 +431,6 @@ export default function App() {
       <Confetti />
       <PulsingCake />
 
-      {/* Header */}
       <div style={{
         position: "relative",
         zIndex: 20,
@@ -367,6 +438,9 @@ export default function App() {
         paddingTop: "clamp(20px, 4vh, 48px)",
         pointerEvents: "none",
       }}>
+        <div style={{ fontSize: "clamp(16px, 3vw, 22px)", marginBottom: "4px" }}>
+          🎉 March 12 · The Legend Turns 24 🎉
+        </div>
         <HappyBirthdayText />
         <style>{`
           @keyframes shimmer {
@@ -381,7 +455,6 @@ export default function App() {
         `}</style>
       </div>
 
-      {/* Hint */}
       <div style={{
         position: "absolute",
         bottom: "24px",
@@ -402,17 +475,21 @@ export default function App() {
         👆 Click on the faces to unlock birthday wishes!
       </div>
 
-      {/* Floating faces */}
       <div style={{ position: "absolute", inset: 0, zIndex: 10 }}>
         {FACES.map((emoji, i) => (
           <Face key={i} id={i} emoji={emoji} onClick={handleFaceClick} />
         ))}
       </div>
 
-      {/* Modal */}
       {openWish && (
         <WishModal wish={openWish} onClose={() => setOpenWish(null)} />
       )}
+
+      {fireworks.map((fw) => (
+        <Firework key={fw.id} x={fw.x} y={fw.y} onDone={() =>
+          setFireworks((prev) => prev.filter((f) => f.id !== fw.id))
+        } />
+      ))}
     </div>
   );
 }
