@@ -251,7 +251,7 @@ function WishModal({ wish, onClose }) {
               letterSpacing: "0.5px",
             }}
           >
-            Wish Accepted 💕
+            Wish Accepted
           </button>
         </div>
       </div>
@@ -260,12 +260,12 @@ function WishModal({ wish, onClose }) {
 }
 
 const BIRTHDAY_PHRASES = [
-  "Happy Birthday Suu iuuu 🥳",
-  "CHUC MUNG SINH NHAT Suu iuuu 🥳",
-  "생일 축하해 Suu iuuu 🥳",
-  "お誕生日おめでとう Suu iuuu 🥳",
-  "生日快乐 Suu iuuu 🥳",
-  "Feliz Cumpleaños Suu iuuu 🥳",
+  "Happy Birthday Suu iuuu",
+  "CHUC MUNG SINH NHAT Suu iuuu",
+  "생일 축하해 Suu iuuu",
+  "お誕生日おめでとう Suu iuuu",
+  "生日快乐 Suu iuuu",
+  "Feliz Cumpleaños Suu iuuu",
 ];
 
 function speakPhrase(index) {
@@ -318,7 +318,7 @@ function HappyBirthdayText() {
 }
 
 function Confetti() {
-  const animals = ["🐶", "💸", "🎂", "🎓", "🌉", "📱", "🎉", "MONEY", "PHD", "H1B", "HEALTH", "WEALTH", "FAMILY"];
+  const animals = ["🐶", "💸", "🎂", "🎓", "🌉", "📱", "🎉"];
   const pieces = Array.from({ length: 30 }, (_, i) => ({
     id: i,
     left: `${Math.random() * 100}%`,
@@ -438,9 +438,6 @@ export default function App() {
         paddingTop: "clamp(20px, 4vh, 48px)",
         pointerEvents: "none",
       }}>
-        <div style={{ fontSize: "clamp(16px, 3vw, 22px)", marginBottom: "4px" }}>
-          🎉 March 12 · The Legend Turns 24 🎉
-        </div>
         <HappyBirthdayText />
         <style>{`
           @keyframes shimmer {
