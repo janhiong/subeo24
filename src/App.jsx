@@ -24,7 +24,7 @@ const WISHES = [
   {
     title: "#5 The Real One",
     message:
-      "Okay but forreal... I wish you everything. Health, happiness, success, good hair days, fast WiFi, and me. Always me. Happy birthday Subeo!!",
+      "Okay but forreal... I wish you everything. Health, happiness, success, good hair days, and me. Always me. Happy birthday Subeo!!",
   },
 ];
 
