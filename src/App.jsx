@@ -1,14 +1,5 @@
 import { useState, useEffect, useRef } from "react";
 
-const SPEECH_LANGS = [
-  { text: "Happy Birthday Su!", lang: "en-US" },
-  { text: "Chúc mừng sinh nhật Su!", lang: "vi-VN" },
-  { text: "생일 축하해 Su!", lang: "ko-KR" },
-  { text: "お誕生日おめでとう Su!", lang: "ja-JP" },
-  { text: "生日快乐 Su!", lang: "zh-CN" },
-  { text: "Feliz Cumpleaños Su!", lang: "es-ES" },
-];
-
 const WISHES = [
   {
     title: "#1 The Glow Up",
